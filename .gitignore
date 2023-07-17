@@ -1,0 +1,12 @@
+node_modules/
+*.log
+coverage
+.idea/
+.DS_Store
+.vscode/
+build/
+dist/
+tmp/
+temp/
+database.sqlite
+.env
