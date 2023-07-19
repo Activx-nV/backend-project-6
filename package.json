@@ -2,8 +2,7 @@
    "name": "@hexlet/code",
    "version": "0.1.0",
    "type": "module",
-   "description": "[![Actions Status](https://github.com/Activx-nV/backend-project-6/workflows/hexlet-check/badge.svg)](https://github.com/Activx-nV/backend-project-6/actions)",
-   "main": "./src/index.js",
+   "description": "Task manager",
    "engines": {
       "node": ">=16.x"
    },
@@ -21,8 +20,16 @@
          "dotenv/config"
       ]
    },
-   "author": "Lauri Kammonen",
+   "author": "LK",
    "license": "ISC",
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/Activx-nV/backend-project-6.git"
+   },
+   "bugs": {
+      "url": "https://github.com/Activx-nV/backend-project-6/issues"
+   },
+   "homepage": "https://github.com/Activx-nV/backend-project-6#readme",
    "dependencies": {
       "@vscode/sqlite3": "^5.0.8",
       "@fastify/formbody": "^7.0.1",
