@@ -2,11 +2,11 @@
    "name": "@hexlet/code",
    "version": "0.1.0",
    "type": "module",
-   "description": "Task manager",
+   "description": "[![Actions Status](https://github.com/Activx-nV/backend-project-6/workflows/hexlet-check/badge.svg)](https://github.com/Activx-nV/backend-project-6/actions)",
+   "main": "./src/index.js",
    "engines": {
       "node": ">=16.x"
    },
-   "main": "./src/index.js",
    "scripts": {
       "prebuild": "rm -rf dist",
       "test": "jest --verbose --runInBand",
