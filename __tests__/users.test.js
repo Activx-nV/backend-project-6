@@ -11,6 +11,7 @@ describe('test users CRUD', () => {
   let app;
   let knex;
   let models;
+  let cookie;
   const testData = getTestData();
 
   beforeAll(async () => {
@@ -31,6 +32,8 @@ describe('test users CRUD', () => {
   });
 
   beforeEach(async () => {
+    await knex.migrate.latest();
+    await prepareData(app);
   });
 
   it('index', async () => {
@@ -70,10 +73,55 @@ describe('test users CRUD', () => {
     expect(user).toMatchObject(expected);
   });
 
+  it('register', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: app.reverse('users'),
+      payload: {
+        data: testData.users.existing,
+      },
+    });
+
+    expect(response.statusCode).toBe(200);
+
+    const [sessionCookie] = response.cookies;
+    const { name, value } = sessionCookie;
+    cookie = { [name]: value };
+
+    const removeResponse = await app.inject({
+      method: 'DELETE',
+      url: '/users/1',
+      cookies: cookie,
+    });
+
+    expect(removeResponse.statusCode).toBe(302);
+  });
+
+  it('update', async () => {
+    const response = await app.inject({
+      method: 'GET',
+      url: '/users/2/edit',
+      cookies: cookie,
+    });
+
+    expect(response.statusCode).toBe(302);
+  });
+
+  it('delete', async () => {
+    const response = await app.inject({
+      method: 'DELETE',
+      url: '/users/2',
+      cookies: cookie,
+    });
+
+    expect(response.statusCode).toBe(302);
+  });
+
   afterEach(async () => {
     // Пока Segmentation fault: 11
     // после каждого теста откатываем миграции
     // await knex.migrate.rollback();
+    await knex('users').truncate();
   });
 
   afterAll(async () => {

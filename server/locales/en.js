@@ -18,8 +18,18 @@ export default {
           error: 'Failed to register',
           success: 'User registered successfully',
         },
+        update: {
+          error: 'Failed to update',
+          success: 'User updated successfully',
+        },
+        delete: {
+          error: 'Failed to delete',
+          success: 'User deleted successfully',
+          noAccess: 'You have no access to delete this user',
+        },
       },
       authError: 'Access denied! Please login',
+      accessError: 'You have no access to delete or edit another user.',
     },
     layouts: {
       application: {
@@ -27,6 +37,7 @@ export default {
         signIn: 'Login',
         signUp: 'Register',
         signOut: 'Logout',
+        edit: 'Edit',
       },
     },
     views: {
@@ -44,6 +55,9 @@ export default {
           submit: 'Register',
           signUp: 'Register',
         },
+        actions: 'Actions',
+        update: 'Update',
+        delete: 'Delete',
       },
       welcome: {
         index: {
