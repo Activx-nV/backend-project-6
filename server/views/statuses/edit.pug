@@ -1,0 +1,10 @@
+extends ../layouts/application.pug
+
+block header
+  h1.display-4.fw-bold.mt-4= t('layouts.application.statusEdit')
+
+block content
+  +formFor()(action=`/statuses/${status.id}` method='post')
+    +input(status, 'name', errors, value =t('views.statuses.name'))(type="text")
+    input(type="hidden" name="_method" value="PATCH")
+    +submit(status)(value=t('views.statuses.update'))

@@ -27,8 +27,6 @@ describe('test users CRUD', () => {
     // тесты не должны зависеть друг от друга
     // перед каждым тестом выполняем миграции
     // и заполняем БД тестовыми данными
-    await knex.migrate.latest();
-    await prepareData(app);
   });
 
   beforeEach(async () => {
@@ -88,13 +86,13 @@ describe('test users CRUD', () => {
     const { name, value } = sessionCookie;
     cookie = { [name]: value };
 
-    const removeResponse = await app.inject({
+    const deleteResponse = await app.inject({
       method: 'DELETE',
       url: '/users/1',
       cookies: cookie,
     });
 
-    expect(removeResponse.statusCode).toBe(302);
+    expect(deleteResponse.statusCode).toBe(302);
   });
 
   it('update', async () => {

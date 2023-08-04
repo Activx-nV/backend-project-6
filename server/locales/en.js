@@ -15,17 +15,31 @@ export default {
       },
       users: {
         create: {
-          error: 'Failed to register',
+          error: 'Failed to register the user',
           success: 'User registered successfully',
         },
         update: {
-          error: 'Failed to update',
+          error: 'Failed to update the user',
           success: 'User updated successfully',
         },
         delete: {
-          error: 'Failed to delete',
+          error: 'Failed to delete the user',
           success: 'User deleted successfully',
           noAccess: 'You have no access to delete this user',
+        },
+      },
+      statuses: {
+        create: {
+          error: 'Failed to create the status',
+          success: 'Status created successfully',
+        },
+        update: {
+          error: 'Failed to update the status',
+          update: 'Status updated successfully',
+        },
+        delete: {
+          error: 'Failed to delete the status',
+          success: 'Status deleted successfully',
         },
       },
       authError: 'Access denied! Please login',
@@ -38,6 +52,9 @@ export default {
         signUp: 'Register',
         signOut: 'Logout',
         edit: 'Edit',
+        statuses: 'Statuses',
+        createStatus: 'Create status',
+        statusEdit: 'Status update',
       },
     },
     views: {
@@ -65,6 +82,15 @@ export default {
           description: 'Online programming school',
           more: 'Learn more',
         },
+      },
+      statuses: {
+        id: 'ID',
+        name: 'Name',
+        createdAt: 'Created at',
+        createStatus: 'Create status',
+        create: 'Create',
+        delete: 'Delete',
+        update: 'Update',
       },
     },
   },
