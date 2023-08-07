@@ -1,13 +1,14 @@
 extends ../layouts/application.pug
 
 block header
-  h1.display-4.fw-bold.mt-4= t('layouts.application.users')
+  = t('layouts.application.users')
 
 block content
   table.table.table-striped
     thead
       tr
         th= t('views.users.id')
+        th= t('views.users.fullName')
         th= t('views.users.email')
         th= t('views.users.createdAt')
         th= t('views.users.actions')
@@ -15,6 +16,7 @@ block content
       each user in users
         tr
           td.align-middle= user.id
+          td.align-middle= `${user.firstName} ${user.lastName}` 
           td.align-middle= user.email
           td.align-middle= formatDate(user.createdAt)
           td

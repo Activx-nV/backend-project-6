@@ -16,5 +16,21 @@
     "existing": {
       "name": "status2"
     }
+  },
+  "tasks": {
+    "new": {
+      "name": "task1",
+      "description": "first task",
+      "statusId": 1,
+      "creatorId": 2,
+      "executorId": 3
+    },
+    "existing": {
+      "name": "task2",
+      "description": "second task",
+      "statusId": 1,
+      "creatorId": 2,
+      "executorId": 3
+    }
   }
 }

@@ -1,13 +1,10 @@
 // @ts-check
 
-import _ from 'lodash';
 import fastify from 'fastify';
-
 import init from '../server/plugin.js';
-import encrypt from '../server/lib/secure.cjs';
 import { getTestData, prepareData } from './helpers/index.js';
 
-describe('test users CRUD', () => {
+describe('test tasks CRUD', () => {
   let app;
   let knex;
   let models;
@@ -22,11 +19,6 @@ describe('test users CRUD', () => {
     await init(app);
     knex = app.objection.knex;
     models = app.objection.models;
-
-    // TODO: пока один раз перед тестами
-    // тесты не должны зависеть друг от друга
-    // перед каждым тестом выполняем миграции
-    // и заполняем БД тестовыми данными
   });
 
   beforeEach(async () => {
@@ -37,13 +29,13 @@ describe('test users CRUD', () => {
   it('register', async () => {
     const response = await app.inject({
       method: 'POST',
-      url: app.reverse('users'),
+      url: app.reverse('tasks'),
       payload: {
-        data: testData.users.existing,
+        data: testData.tasks.existing,
       },
     });
 
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(302);
 
     const [sessionCookie] = response.cookies;
     const { name, value } = sessionCookie;
@@ -51,7 +43,7 @@ describe('test users CRUD', () => {
 
     const deleteResponse = await app.inject({
       method: 'DELETE',
-      url: '/users/1',
+      url: '/tasks/2',
       cookies: cookie,
     });
 
@@ -61,26 +53,26 @@ describe('test users CRUD', () => {
   it('index', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: app.reverse('users'),
+      url: app.reverse('tasks'),
     });
 
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(302);
   });
 
   it('new', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: app.reverse('newUser'),
+      url: app.reverse('newTask'),
     });
 
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(302);
   });
 
   it('create', async () => {
-    const params = testData.users.existing;
+    const params = testData.tasks.new;
     const response = await app.inject({
       method: 'POST',
-      url: app.reverse('users'),
+      url: app.reverse('tasks'),
       payload: {
         data: params,
       },
@@ -88,39 +80,39 @@ describe('test users CRUD', () => {
     });
 
     expect(response.statusCode).toBe(302);
-    const expected = {
-      ..._.omit(params, 'password'),
-      passwordDigest: encrypt(params.password),
-    };
-    const user = await models.user.query().findOne({ email: params.email });
-    expect(user).toMatchObject(expected);
+    const task = await models.task.query().findOne({ name: params.name });
+    expect(task).toMatchObject(params);
   });
 
   it('update', async () => {
     const response = await app.inject({
-      method: 'GET',
-      url: '/users/2/edit',
+      method: 'PATCH',
+      url: '/tasks/2',
       cookies: cookie,
     });
+    expect(response.statusCode).toBe(302);
+  });
 
+  it('edit', async () => {
+    const response = await app.inject({
+      method: 'GET',
+      url: '/tasks/2/edit',
+      cookies: cookie,
+    });
     expect(response.statusCode).toBe(302);
   });
 
   it('delete', async () => {
     const response = await app.inject({
       method: 'DELETE',
-      url: '/users/2',
+      url: '/tasks/2',
       cookies: cookie,
     });
-
     expect(response.statusCode).toBe(302);
   });
 
   afterEach(async () => {
-    // Пока Segmentation fault: 11
-    // после каждого теста откатываем миграции
-    // await knex.migrate.rollback();
-    await knex('users').truncate();
+    await knex('tasks').truncate();
   });
 
   afterAll(async () => {

@@ -42,6 +42,20 @@ export default {
           success: 'Status deleted successfully',
         },
       },
+      tasks: {
+        update: {
+          error: 'Failed to update the task',
+          success: 'Task updated successfully',
+        },
+        create: {
+          error: 'Failed to create the task',
+          success: 'Task created successfully',
+        },
+        delete: {
+          error: 'A task can only be deleted by its author.',
+          success: 'Task deleted successfully',
+        },
+      },
       authError: 'Access denied! Please login',
       accessError: 'You have no access to delete or edit another user.',
     },
@@ -53,8 +67,11 @@ export default {
         signOut: 'Logout',
         edit: 'Edit',
         statuses: 'Statuses',
-        createStatus: 'Create status',
+        createStatus: 'Creation of a status',
         statusEdit: 'Status update',
+        tasks: 'Tasks',
+        createTask: 'Creation of a task',
+        updateTask: 'Task update',
       },
     },
     views: {
@@ -67,6 +84,7 @@ export default {
       users: {
         id: 'ID',
         email: 'Email',
+        fullName: 'Full name',
         createdAt: 'Created at',
         new: {
           submit: 'Register',
@@ -91,6 +109,26 @@ export default {
         create: 'Create',
         delete: 'Delete',
         update: 'Update',
+      },
+      tasks: {
+        id: 'ID',
+        name: 'Name',
+        status: 'Status',
+        author: 'Author',
+        executor: 'Executor',
+        createdAt: 'Created at',
+        create: 'Create a task',
+        delete: 'Delete',
+        update: 'Update',
+        actions: 'Actions',
+        description: 'Description',
+        label: 'Label',
+        labels: 'Labels',
+        show: 'Show',
+        onlyMyTasks: 'Only my tasks',
+        new: {
+          create: 'Create'
+        }
       },
     },
   },

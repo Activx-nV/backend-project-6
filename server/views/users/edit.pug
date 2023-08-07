@@ -1,10 +1,12 @@
 extends ../layouts/application.pug
 
 block header
-  h1.display-4.fw-bold.mt-4= t('layouts.application.edit')
+  = t('layouts.application.edit')
 
 block content
   +formFor()(action=`/users/${user.id}` method='post')
+    +input(user, 'firstName', errors, value =t('views.users.firstName'))(type="text", value = user.firstName)
+    +input(user, 'lastName', errors, value =t('views.users.lastName'))(type="text", value = user.lastName)
     +input(user, 'email', errors, value =t('views.users.email'))(type="text",value = user.email)
     +input(user, 'password', errors, value =t('views.users.password'))(type="password")
     input(type="hidden" name="_method" value="PATCH")
