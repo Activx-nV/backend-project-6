@@ -16,6 +16,7 @@ import fastifyObjectionjs from 'fastify-objectionjs';
 import qs from 'qs';
 import Pug from 'pug';
 import i18next from 'i18next';
+import Rollbar from 'rollbar';
 
 import ru from './locales/ru.js';
 import en from './locales/en.js';
@@ -119,6 +120,20 @@ export const options = {
   exposeHeadRoutes: false,
 };
 
+const setErrorHandler = (app) => {
+  const rollbar = new Rollbar({
+    accessToken: process.env.ROLLBAR_KEY,
+    captureUncaught: true,
+    captureUnhandledRejections: true,
+  });
+
+  app.setErrorHandler((error) => {
+    rollbar.error(error);
+  });
+
+  return app;
+};
+
 // eslint-disable-next-line no-unused-vars
 export default async (app, _options) => {
   await registerPlugins(app);
@@ -128,6 +143,7 @@ export default async (app, _options) => {
   setUpStaticAssets(app);
   addRoutes(app);
   addHooks(app);
+  setErrorHandler(app);
 
   return app;
 };
