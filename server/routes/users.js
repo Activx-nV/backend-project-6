@@ -51,7 +51,7 @@ export default (app) => {
     })
     .patch('/users/:id', async (req, reply) => {
       const { id } = req.params;
-      
+
       try {
         await req.user.$query().update(req.body.data);
         req.flash('info', i18next.t('flash.users.update.success'));

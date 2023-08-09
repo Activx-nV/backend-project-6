@@ -128,7 +128,7 @@ export default (app) => {
 
       try {
         const validTask = await app.objection.models.task.fromJson(taskData);
-        
+
         await app.objection.models.task.transaction(async (trx) => {
           const updatedTask = {
             id: taskId,
