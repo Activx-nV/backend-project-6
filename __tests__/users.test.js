@@ -22,11 +22,6 @@ describe('test users CRUD', () => {
     await init(app);
     knex = app.objection.knex;
     models = app.objection.models;
-
-    // TODO: пока один раз перед тестами
-    // тесты не должны зависеть друг от друга
-    // перед каждым тестом выполняем миграции
-    // и заполняем БД тестовыми данными
   });
 
   beforeEach(async () => {
@@ -35,7 +30,7 @@ describe('test users CRUD', () => {
   });
 
   it('register', async () => {
-    const response = await app.inject({
+    const responsePost = await app.inject({
       method: 'POST',
       url: app.reverse('users'),
       payload: {
@@ -43,19 +38,19 @@ describe('test users CRUD', () => {
       },
     });
 
-    expect(response.statusCode).toBe(200);
+    expect(responsePost.statusCode).toBe(200);
 
-    const [sessionCookie] = response.cookies;
+    const [sessionCookie] = responsePost.cookies;
     const { name, value } = sessionCookie;
     cookie = { [name]: value };
 
-    const deleteResponse = await app.inject({
+    const responseDelete = await app.inject({
       method: 'DELETE',
       url: '/users/1',
       cookies: cookie,
     });
 
-    expect(deleteResponse.statusCode).toBe(302);
+    expect(responseDelete.statusCode).toBe(302);
   });
 
   it('index', async () => {
@@ -77,7 +72,7 @@ describe('test users CRUD', () => {
   });
 
   it('create', async () => {
-    const params = testData.users.existing;
+    const params = testData.users.new;
     const response = await app.inject({
       method: 'POST',
       url: app.reverse('users'),
@@ -98,11 +93,20 @@ describe('test users CRUD', () => {
 
   it('update', async () => {
     const response = await app.inject({
+      method: 'PATCH',
+      url: '/users/1',
+      cookies: cookie,
+    });
+
+    expect(response.statusCode).toBe(302);
+  });
+
+  it('edit', async () => {
+    const response = await app.inject({
       method: 'GET',
       url: '/users/2/edit',
       cookies: cookie,
     });
-
     expect(response.statusCode).toBe(302);
   });
 

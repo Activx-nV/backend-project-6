@@ -6,11 +6,13 @@ export default (app) => {
   app
     .get('/users', { name: 'users' }, async (req, reply) => {
       const users = await app.objection.models.user.query();
+
       reply.render('users/index', { users });
       return reply;
     })
     .get('/users/new', { name: 'newUser' }, (req, reply) => {
       const user = new app.objection.models.user();
+
       reply.render('users/new', { user });
     })
     .get('/users/:id/edit', { name: 'currentUser' }, async (req, reply) => {
@@ -36,6 +38,7 @@ export default (app) => {
 
       try {
         const validUser = await app.objection.models.user.fromJson(req.body.data);
+
         await app.objection.models.user.query().insert(validUser);
         req.flash('info', i18next.t('flash.users.create.success'));
         reply.redirect(app.reverse('root'));
@@ -48,6 +51,7 @@ export default (app) => {
     })
     .patch('/users/:id', async (req, reply) => {
       const { id } = req.params;
+      
       try {
         await req.user.$query().update(req.body.data);
         req.flash('info', i18next.t('flash.users.update.success'));

@@ -4,7 +4,7 @@ import fastify from 'fastify';
 import init from '../server/plugin.js';
 import { getTestData, prepareData } from './helpers/index.js';
 
-describe('test tasks CRUD', () => {
+describe('test labels CRUD', () => {
   let app;
   let knex;
   let models;
@@ -29,7 +29,7 @@ describe('test tasks CRUD', () => {
   it('index', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: app.reverse('tasks'),
+      url: app.reverse('labels'),
     });
 
     expect(response.statusCode).toBe(302);
@@ -38,32 +38,32 @@ describe('test tasks CRUD', () => {
   it('new', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: app.reverse('newTask'),
+      url: app.reverse('newLabel'),
     });
 
     expect(response.statusCode).toBe(302);
   });
 
   it('create', async () => {
-    const params = testData.tasks.new;
+    const params = testData.labels.new;
     const response = await app.inject({
       method: 'POST',
-      url: app.reverse('tasks'),
+      url: app.reverse('labels'),
       payload: {
         data: params,
       },
       cookies: cookie,
     });
 
-    expect(response.statusCode).toBe(302);
-    const task = await models.task.query().findOne({ name: params.name });
-    expect(task).toMatchObject(params);
+    expect(response.statusCode).toBe(200);
+    const label = await models.label.query().findOne({ name: params.name });
+    expect(label).toMatchObject(params);
   });
 
   it('update', async () => {
     const response = await app.inject({
       method: 'PATCH',
-      url: '/tasks/2',
+      url: '/labels/1',
       cookies: cookie,
     });
 
@@ -73,7 +73,7 @@ describe('test tasks CRUD', () => {
   it('edit', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: '/tasks/2/edit',
+      url: '/labels/2/edit',
       cookies: cookie,
     });
 
@@ -83,7 +83,7 @@ describe('test tasks CRUD', () => {
   it('delete', async () => {
     const response = await app.inject({
       method: 'DELETE',
-      url: '/tasks/2',
+      url: '/labels/2',
       cookies: cookie,
     });
 
@@ -91,7 +91,7 @@ describe('test tasks CRUD', () => {
   });
 
   afterEach(async () => {
-    await knex('tasks').truncate();
+    await knex('labels').truncate();
   });
 
   afterAll(async () => {

@@ -1,7 +1,6 @@
 // @ts-check
 
 import fastify from 'fastify';
-
 import init from '../server/plugin.js';
 import { getTestData, prepareData } from './helpers/index.js';
 
@@ -67,6 +66,7 @@ describe('test statuses CRUD', () => {
       url: '/statuses/1',
       cookies: cookie,
     });
+
     expect(response.statusCode).toBe(302);
   });
 
@@ -76,6 +76,7 @@ describe('test statuses CRUD', () => {
       url: '/statuses/2/edit',
       cookies: cookie,
     });
+
     expect(response.statusCode).toBe(302);
   });
 
@@ -85,6 +86,7 @@ describe('test statuses CRUD', () => {
       url: '/statuses/2',
       cookies: cookie,
     });
+
     expect(response.statusCode).toBe(302);
   });
 

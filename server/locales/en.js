@@ -56,6 +56,20 @@ export default {
           success: 'Task deleted successfully',
         },
       },
+      labels: {
+        update: {
+          error: 'Failed to update the label',
+          success: 'Label updated successfully',
+        },
+        create: {
+          error: 'Failed to create the label',
+          success: 'Label successfully created',
+        },
+        delete: {
+          error: 'Failed to delete the label',
+          success: 'Label successfully deleted',
+        },
+      },
       authError: 'Access denied! Please login',
       accessError: 'You have no access to delete or edit another user.',
     },
@@ -72,6 +86,9 @@ export default {
         tasks: 'Tasks',
         createTask: 'Creation of a task',
         updateTask: 'Task update',
+        labels: 'Labels',
+        createLabel: 'Create a label',
+        labelEdit: 'Label update',
       },
     },
     views: {
@@ -84,6 +101,9 @@ export default {
       users: {
         id: 'ID',
         email: 'Email',
+        firstName: 'First name',
+        lastName: 'Last name',
+        password: 'Password',
         fullName: 'Full name',
         createdAt: 'Created at',
         new: {
@@ -105,7 +125,7 @@ export default {
         id: 'ID',
         name: 'Name',
         createdAt: 'Created at',
-        createStatus: 'Create status',
+        createStatus: 'Create a status',
         create: 'Create',
         delete: 'Delete',
         update: 'Update',
@@ -127,8 +147,18 @@ export default {
         show: 'Show',
         onlyMyTasks: 'Only my tasks',
         new: {
-          create: 'Create'
-        }
+          create: 'Create',
+        },
+      },
+      labels: {
+        id: 'ID',
+        name: 'Name',
+        createdAt: 'Creation date',
+        actions: 'Actions',
+        create: 'Create',
+        update: 'Update',
+        delete: 'Delete',
+        createLabel: 'Create a label',
       },
     },
   },

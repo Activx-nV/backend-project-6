@@ -32,5 +32,13 @@
       "creatorId": 2,
       "executorId": 3
     }
+  },
+  "labels": {
+    "new": {
+      "name": "label1"
+    },
+    "existing": {
+      "name": "label2"
+    }
   }
 }
