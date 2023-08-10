@@ -6,6 +6,8 @@
 ### CodeClimate:
 [![Maintainability](https://api.codeclimate.com/v1/badges/702f898eafb30e199123/maintainability)](https://codeclimate.com/github/Activx-nV/backend-project-6/maintainability)
 
+[![Test Coverage](https://api.codeclimate.com/v1/badges/702f898eafb30e199123/test_coverage)](https://codeclimate.com/github/Activx-nV/backend-project-6/test_coverage)
+
 ### NodeJS CI:
 [![NodeJS CI](https://github.com/Activx-nV/backend-project-6/actions/workflows/nodejs-ci.yml/badge.svg)](https://github.com/Activx-nV/backend-project-6/actions/workflows/nodejs-ci.yml)
 
