@@ -22,7 +22,6 @@ Clone the project, then go to the main(root) directory in terminal and use comma
 ## Setup
 
 ```bash
-make install
 make setup
 ```
 
