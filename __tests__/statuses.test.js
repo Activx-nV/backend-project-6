@@ -19,11 +19,19 @@ describe('test statuses CRUD', () => {
     await init(app);
     knex = app.objection.knex;
     models = app.objection.models;
+    await knex.migrate.latest();
   });
 
   beforeEach(async () => {
-    await knex.migrate.latest();
     await prepareData(app);
+  });
+
+  afterEach(async () => {
+    await knex('task_statuses').truncate();
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 
   it('index', async () => {
@@ -88,13 +96,5 @@ describe('test statuses CRUD', () => {
     });
 
     expect(response.statusCode).toBe(302);
-  });
-
-  afterEach(async () => {
-    await knex('task_statuses').truncate();
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 });

@@ -19,10 +19,10 @@ describe('test tasks CRUD', () => {
     await init(app);
     knex = app.objection.knex;
     models = app.objection.models;
+    await knex.migrate.latest();
   });
 
   beforeEach(async () => {
-    await knex.migrate.latest();
     await prepareData(app);
   });
 
