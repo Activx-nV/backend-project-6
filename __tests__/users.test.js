@@ -80,16 +80,17 @@ describe('test users CRUD', () => {
   });
 
   it('create', async () => {
-    const params = testData.users.existing;
+    const params = testData.users.new;
     const response = await app.inject({
       method: 'POST',
       url: app.reverse('users'),
       payload: {
         data: params,
       },
+      cookies: cookie,
     });
 
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(302);
     const expected = {
       ..._.omit(params, 'password'),
       passwordDigest: encrypt(params.password),

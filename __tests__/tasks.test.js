@@ -23,6 +23,10 @@ describe('test tasks CRUD', () => {
     await prepareData(app);
   });
 
+  beforeEach(async () => {
+    await prepareData(app);
+  });
+
   it('index', async () => {
     const response = await app.inject({
       method: 'GET',

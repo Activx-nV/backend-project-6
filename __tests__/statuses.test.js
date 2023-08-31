@@ -60,7 +60,7 @@ describe('test statuses CRUD', () => {
       cookies: cookie,
     });
 
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(302);
     const status = await models.taskStatus.query().findOne({ name: params.name });
     expect(status).toMatchObject(params);
   });
