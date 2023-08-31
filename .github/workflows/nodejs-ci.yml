@@ -24,9 +24,9 @@ jobs:
         run: make setup
       - name: Run linter
         run: make lint
-      # - name: Run tests
-      #   env:
-      #     CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-      #     SESSION_KEY: ${{ secrets.SESSION_KEY }}
-      #     ROLLBAR_KEY: ${{ secrets.ROLLBAR_KEY }}
-      #   run: make testOneByOne
+      - name: Run tests
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          SESSION_KEY: ${{ secrets.SESSION_KEY }}
+          ROLLBAR_KEY: ${{ secrets.ROLLBAR_KEY }}
+        run: make test
