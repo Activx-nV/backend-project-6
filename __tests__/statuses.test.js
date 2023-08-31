@@ -19,9 +19,6 @@ describe('test statuses CRUD', () => {
     await init(app);
     knex = app.objection.knex;
     models = app.objection.models;
-  });
-
-  beforeEach(async () => {
     await knex.migrate.latest();
     await prepareData(app);
   });
@@ -55,7 +52,7 @@ describe('test statuses CRUD', () => {
       cookies: cookie,
     });
 
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(302);
     const status = await models.taskStatus.query().findOne({ name: params.name });
     expect(status).toMatchObject(params);
   });

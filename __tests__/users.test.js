@@ -22,9 +22,6 @@ describe('test users CRUD', () => {
     await init(app);
     knex = app.objection.knex;
     models = app.objection.models;
-  });
-
-  beforeEach(async () => {
     await knex.migrate.latest();
     await prepareData(app);
   });

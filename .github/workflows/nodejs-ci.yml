@@ -20,6 +20,10 @@ jobs:
         with:
           node-version: '18.x'
           cache: 'npm'
+        - name: Set Up Environment
+        env:
+          SESSION_KEY: ${{ secrets.SESSION_KEY }}
+          ROLLBAR_KEY: ${{ secrets.ROLLBAR_KEY }}
       - run: make setup
       - run: make lint
       - run: make test
