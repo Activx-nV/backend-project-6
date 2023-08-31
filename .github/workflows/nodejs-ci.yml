@@ -20,10 +20,13 @@ jobs:
         with:
           node-version: '18.x'
           cache: 'npm'
-        - name: Set Up Environment
+      - name: Setup project
+        run: make setup
+      - name: Run linter
+        run: make lint
+      - name: Run tests
         env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           SESSION_KEY: ${{ secrets.SESSION_KEY }}
           ROLLBAR_KEY: ${{ secrets.ROLLBAR_KEY }}
-      - run: make setup
-      - run: make lint
-      - run: make test
+        run: make test

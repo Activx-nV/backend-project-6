@@ -26,3 +26,14 @@ lint:
 
 test:
 	npm test -s
+
+testOneByOne:
+	npx jest __tests__/users.test.js
+	npx jest __tests__/tasks.test.js
+	npx jest __tests__/statuses.test.js
+	npx jest __tests__/labels.test.js
+	npx jest __tests__/session.test.js
+	npx jest __tests__/app.test.js
+
+test-coverage:
+	npm test -- --coverage

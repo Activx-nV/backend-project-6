@@ -26,6 +26,17 @@ describe('test users CRUD', () => {
     await prepareData(app);
   });
 
+  afterEach(async () => {
+    // Пока Segmentation fault: 11
+    // после каждого теста откатываем миграции
+    // await knex.migrate.rollback();
+    await knex('users').truncate();
+  });
+
+  afterAll(async () => {
+    await app.close();
+  });
+
   it('register', async () => {
     const responsePost = await app.inject({
       method: 'POST',
@@ -115,16 +126,5 @@ describe('test users CRUD', () => {
     });
 
     expect(response.statusCode).toBe(302);
-  });
-
-  afterEach(async () => {
-    // Пока Segmentation fault: 11
-    // после каждого теста откатываем миграции
-    // await knex.migrate.rollback();
-    await knex('users').truncate();
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 });

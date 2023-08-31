@@ -23,6 +23,14 @@ describe('test statuses CRUD', () => {
     await prepareData(app);
   });
 
+  afterEach(async () => {
+    await knex('task_statuses').truncate();
+  });
+
+  afterAll(async () => {
+    await app.close();
+  });
+
   it('index', async () => {
     const response = await app.inject({
       method: 'GET',
@@ -85,13 +93,5 @@ describe('test statuses CRUD', () => {
     });
 
     expect(response.statusCode).toBe(302);
-  });
-
-  afterEach(async () => {
-    await knex('task_statuses').truncate();
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 });
