@@ -23,12 +23,15 @@ describe('test statuses CRUD', () => {
     await prepareData(app);
   });
 
-  // afterEach(async () => {
-  //   await knex('task_statuses').truncate();
-  // });
+  beforeEach(async () => {
+    await prepareData(app);
+  });
+
+  afterEach(async () => {
+    await knex('task_statuses').truncate();
+  });
 
   afterAll(async () => {
-    await knex('task_statuses').truncate();
     await app.close();
   });
 

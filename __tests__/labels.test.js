@@ -23,6 +23,10 @@ describe('test labels CRUD', () => {
     await prepareData(app);
   });
 
+  beforeEach(async () => {
+    await prepareData(app);
+  });
+
   it('index', async () => {
     const response = await app.inject({
       method: 'GET',
@@ -87,12 +91,11 @@ describe('test labels CRUD', () => {
     expect(response.statusCode).toBe(302);
   });
 
-  // afterEach(async () => {
-  //   await knex('labels').truncate();
-  // });
+  afterEach(async () => {
+    await knex('labels').truncate();
+  });
 
   afterAll(async () => {
-    await knex('labels').truncate();
     await app.close();
   });
 });
