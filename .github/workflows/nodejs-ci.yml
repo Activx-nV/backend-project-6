@@ -22,8 +22,6 @@ jobs:
           cache: 'npm'
       - name: Setup project
         run: make setup
-      - name: Create FE dist
-        run: make start-frontend
       - name: Run linter
         run: make lint
       - name: Run tests
