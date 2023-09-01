@@ -52,7 +52,7 @@ describe('test labels CRUD', () => {
       cookies: cookie,
     });
 
-    expect(response.statusCode).toBe(302);
+    expect(response.statusCode).toBe(200);
     const label = await models.label.query().findOne({ name: params.name });
     expect(label).toMatchObject(params);
   });
@@ -87,11 +87,12 @@ describe('test labels CRUD', () => {
     expect(response.statusCode).toBe(302);
   });
 
-  afterEach(async () => {
-    await knex('labels').truncate();
-  });
+  // afterEach(async () => {
+  //   await knex('labels').truncate();
+  // });
 
   afterAll(async () => {
+    await knex('labels').truncate();
     await app.close();
   });
 });

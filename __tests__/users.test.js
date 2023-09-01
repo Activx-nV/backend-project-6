@@ -26,14 +26,15 @@ describe('test users CRUD', () => {
     await prepareData(app);
   });
 
-  afterEach(async () => {
-    // Пока Segmentation fault: 11
-    // после каждого теста откатываем миграции
-    // await knex.migrate.rollback();
-    await knex('users').truncate();
-  });
+  // afterEach(async () => {
+  //   // Пока Segmentation fault: 11
+  //   // после каждого теста откатываем миграции
+  //   // await knex.migrate.rollback();
+  //   await knex('users').truncate();
+  // });
 
   afterAll(async () => {
+    await knex('users').truncate();
     await app.close();
   });
 

@@ -91,11 +91,12 @@ describe('test tasks CRUD', () => {
     expect(response.statusCode).toBe(302);
   });
 
-  afterEach(async () => {
-    await knex('tasks').truncate();
-  });
+  // afterEach(async () => {
+  //   await knex('tasks').truncate();
+  // });
 
   afterAll(async () => {
+    await knex('tasks').truncate();
     await app.close();
   });
 });
