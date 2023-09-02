@@ -3,7 +3,7 @@
    "version": "0.1.0",
    "type": "module",
    "description": "[![Actions Status](https://github.com/Activx-nV/backend-project-6/workflows/hexlet-check/badge.svg)](https://github.com/Activx-nV/backend-project-6/actions)",
-   "main": "./src/index.js",
+   "main": "./server/plugin.js",
    "engines": {
       "node": ">=16.x"
    },
