@@ -59,7 +59,8 @@
       "qs": "^6.11.0",
       "rollbar": "^2.26.2",
       "sqlite3": "^5.0.11",
-      "webpack": "^5.74.0"
+      "webpack": "^5.74.0",
+      "pg": "^8.11.1"
    },
    "devDependencies": {
       "@jest/globals": "^28.1.3",
