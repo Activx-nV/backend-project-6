@@ -1,4 +1,5 @@
 [
+<<<<<<< HEAD
     {
       "name": "status1"
     },
@@ -9,3 +10,15 @@
       "name": "status3"
     }
   ]
+=======
+  {
+    "name": "status1"
+  },
+  {
+    "name": "status2"
+  },
+  {
+    "name": "status3"
+  }
+]
+>>>>>>> 212e003a7aede671bb70c78ed902e11d432b649a
