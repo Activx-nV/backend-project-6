@@ -1,15 +1,13 @@
-// @ts-check
-
 import fastify from 'fastify';
 import init from '../server/plugin.js';
-import { getTestData, prepareData } from './helpers/index.js';
+import { prepareFakeData, logInToSession } from './helpers/index.js';
 
-describe('test tasks CRUD', () => {
+describe('Tasks CRUD', () => {
   let app;
   let knex;
   let models;
+  let mockData;
   let cookie;
-  const testData = getTestData();
 
   beforeAll(async () => {
     app = fastify({
@@ -20,33 +18,47 @@ describe('test tasks CRUD', () => {
     knex = app.objection.knex;
     models = app.objection.models;
     await knex.migrate.latest();
-    await prepareData(app);
   });
 
   beforeEach(async () => {
-    await prepareData(app);
+    mockData = await prepareFakeData(app);
+    cookie = await logInToSession(app, mockData.users.existing.creator);
   });
 
   it('index', async () => {
     const response = await app.inject({
       method: 'GET',
       url: app.reverse('tasks'),
+      cookies: cookie,
     });
 
-    expect(response.statusCode).toBe(302);
+    expect(response.statusCode).toBe(200);
   });
 
-  it('new', async () => {
+  it('newTask', async () => {
     const response = await app.inject({
       method: 'GET',
       url: app.reverse('newTask'),
+      cookies: cookie,
     });
 
-    expect(response.statusCode).toBe(302);
+    expect(response.statusCode).toBe(200);
   });
 
-  it('create', async () => {
-    const params = testData.tasks.new;
+  it('showTask', async () => {
+    const params = mockData.tasks.existing;
+    const task = await models.task.query().findOne({ name: params.name });
+    const response = await app.inject({
+      method: 'GET',
+      url: app.reverse('specificTask', { id: task.id }),
+      cookies: cookie,
+    });
+
+    expect(response.statusCode).toBe(200);
+  });
+
+  it('createTask', async () => {
+    const params = mockData.tasks.new;
     const response = await app.inject({
       method: 'POST',
       url: app.reverse('tasks'),
@@ -57,42 +69,53 @@ describe('test tasks CRUD', () => {
     });
 
     expect(response.statusCode).toBe(302);
+
     const task = await models.task.query().findOne({ name: params.name });
     expect(task).toMatchObject(params);
   });
 
-  it('update', async () => {
+  it('updateTask', async () => {
+    const updatedTaskName = 'updatedTaskName';
+    const params = mockData.tasks.existing;
+    const task = await models.task.query().findOne({ name: params.name });
     const response = await app.inject({
       method: 'PATCH',
-      url: '/tasks/2',
+      url: app.reverse('updateTask', { id: task.id }),
+      payload: {
+        data: {
+          ...params,
+          name: updatedTaskName,
+        },
+      },
       cookies: cookie,
     });
-
     expect(response.statusCode).toBe(302);
+
+    const updatedTask = await task.$query();
+    expect(updatedTask.name).toEqual(updatedTaskName);
   });
 
-  it('edit', async () => {
-    const response = await app.inject({
-      method: 'GET',
-      url: '/tasks/2/edit',
-      cookies: cookie,
-    });
-
-    expect(response.statusCode).toBe(302);
-  });
-
-  it('delete', async () => {
+  it('deleteTask', async () => {
+    const params = mockData.tasks.existing;
+    const task = await models.task.query().findOne({ name: params.name });
     const response = await app.inject({
       method: 'DELETE',
-      url: '/tasks/2',
+      url: app.reverse('deleteTask', { id: task.id }),
       cookies: cookie,
     });
 
     expect(response.statusCode).toBe(302);
+
+    const deletedTask = await models.task.query().findById(task.id);
+    expect(deletedTask).toBeUndefined();
   });
 
   afterEach(async () => {
+    await knex('users').truncate();
+    await knex('statuses').truncate();
+    await knex('labels').truncate();
     await knex('tasks').truncate();
+    await knex('tasks_labels').truncate();
   });
 
   afterAll(async () => {

@@ -6,6 +6,7 @@ export default (app) => {
   app
     .get('/session/new', { name: 'newSession' }, (req, reply) => {
       const signInForm = {};
+
       reply.render('session/new', { signInForm });
     })
     .post('/session', { name: 'session' }, app.fp.authenticate('form', async (req, reply, err, user) => {
@@ -18,16 +19,19 @@ export default (app) => {
           email: [{ message: i18next.t('flash.session.create.error') }],
         };
         reply.render('session/new', { signInForm, errors });
+
         return reply;
       }
       await req.logIn(user);
       req.flash('success', i18next.t('flash.session.create.success'));
       reply.redirect(app.reverse('root'));
+
       return reply;
     }))
     .delete('/session', (req, reply) => {
       req.logOut();
       req.flash('info', i18next.t('flash.session.delete.success'));
+
       reply.redirect(app.reverse('root'));
     });
 };

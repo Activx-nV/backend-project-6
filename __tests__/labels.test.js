@@ -1,15 +1,13 @@
-// @ts-check
-
 import fastify from 'fastify';
 import init from '../server/plugin.js';
-import { getTestData, prepareData } from './helpers/index.js';
+import { prepareFakeData, logInToSession } from './helpers/index.js';
 
-describe('test labels CRUD', () => {
+describe('Labels CRUD', () => {
   let app;
   let knex;
   let models;
+  let mockData;
   let cookie;
-  const testData = getTestData();
 
   beforeAll(async () => {
     app = fastify({
@@ -20,33 +18,33 @@ describe('test labels CRUD', () => {
     knex = app.objection.knex;
     models = app.objection.models;
     await knex.migrate.latest();
-    await prepareData(app);
-  });
 
-  beforeEach(async () => {
-    await prepareData(app);
+    mockData = await prepareFakeData(app);
+    cookie = await logInToSession(app, mockData.users.existing.executor);
   });
 
   it('index', async () => {
     const response = await app.inject({
       method: 'GET',
       url: app.reverse('labels'),
+      cookies: cookie,
     });
 
-    expect(response.statusCode).toBe(302);
+    expect(response.statusCode).toBe(200);
   });
 
-  it('new', async () => {
+  it('newLabel', async () => {
     const response = await app.inject({
       method: 'GET',
       url: app.reverse('newLabel'),
+      cookies: cookie,
     });
 
-    expect(response.statusCode).toBe(302);
+    expect(response.statusCode).toBe(200);
   });
 
-  it('create', async () => {
-    const params = testData.labels.new;
+  it('createLabel', async () => {
+    const params = mockData.labels.new;
     const response = await app.inject({
       method: 'POST',
       url: app.reverse('labels'),
@@ -56,43 +54,48 @@ describe('test labels CRUD', () => {
       cookies: cookie,
     });
 
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(302);
+
     const label = await models.label.query().findOne({ name: params.name });
     expect(label).toMatchObject(params);
   });
 
-  it('update', async () => {
+  it('updateLabel', async () => {
+    const updatedLabelName = 'updatedLabel';
+    const params = mockData.labels.existing.update;
+
+    const label = await models.label.query().findOne({ name: params.name });
+
     const response = await app.inject({
       method: 'PATCH',
-      url: '/labels/1',
+      url: app.reverse('updateLabel', { id: label.id }),
+      payload: {
+        data: {
+          name: updatedLabelName,
+        },
+      },
       cookies: cookie,
     });
-
     expect(response.statusCode).toBe(302);
+
+    const updatedLabel = await label.$query();
+    expect(updatedLabel.name).toEqual(updatedLabelName);
   });
 
-  it('edit', async () => {
-    const response = await app.inject({
-      method: 'GET',
-      url: '/labels/2/edit',
-      cookies: cookie,
-    });
+  it('deleteLabel', async () => {
+    const params = mockData.labels.existing.delete;
 
-    expect(response.statusCode).toBe(302);
-  });
-
-  it('delete', async () => {
+    const label = await models.label.query().findOne({ name: params.name });
     const response = await app.inject({
       method: 'DELETE',
-      url: '/labels/2',
+      url: app.reverse('deleteLabel', { id: label.id }),
       cookies: cookie,
     });
 
     expect(response.statusCode).toBe(302);
-  });
 
-  afterEach(async () => {
-    await knex('labels').truncate();
+    const deletedLabel = await models.label.query().findById(label.id);
+    expect(deletedLabel).toBeUndefined();
   });
 
   afterAll(async () => {

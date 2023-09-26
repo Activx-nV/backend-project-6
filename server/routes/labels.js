@@ -10,62 +10,72 @@ export default (app) => {
 
       return reply;
     })
-    .get('/labels/new', { name: 'newLabel', preValidation: app.authenticate }, (req, reply) => {
+    .get('/labels/new', { name: 'newLabel', preValidation: app.authenticate }, async (req, reply) => {
       const label = new app.objection.models.label();
       reply.render('labels/new', { label });
+
+      return reply;
     })
-    .post('/labels', async (req, reply) => {
+    .post('/labels', { preValidation: app.authenticate }, async (req, reply) => {
       const label = new app.objection.models.label();
-      label.$set(req.body.data);
+      const { data } = req.body;
+      label.$set(data);
 
       try {
-        const validLabel = await app.objection.models.label.fromJson(req.body.data);
+        const validLabel = await app.objection.models.label.fromJson(data);
         await app.objection.models.label.query().insert(validLabel);
+
         req.flash('info', i18next.t('flash.labels.create.success'));
         reply.redirect(app.reverse('labels'));
-      } catch ({ data }) {
+      } catch (errors) {
         req.flash('error', i18next.t('flash.labels.create.error'));
-        reply.render('labels/new', { label, errors: data });
+        reply.render('labels/new', { label, errors: errors.data ?? {} });
       }
 
       return reply;
     })
     .get('/labels/:id/edit', { name: 'editLabel', preValidation: app.authenticate }, async (req, reply) => {
-      const label = await app.objection.models.label.query().findById(req.params.id);
-      reply.render('/labels/edit', { label });
+      const { id } = req.params;
+      const label = await app.objection.models.label.query().findById(id);
+      reply.render('labels/edit', { label });
 
       return reply;
     })
-    .patch('/labels/:id', async (req, reply) => {
+    .patch('/labels/:id', { name: 'updateLabel', preValidation: app.authenticate }, async (req, reply) => {
+      const { id } = req.params;
+      const { data } = req.body;
+      const label = await app.objection.models.label.query().findById(id);
+
+      try {
+        const validLabel = await app.objection.models.label.fromJson(data);
+        await label.$query().patch(validLabel);
+
+        req.flash('info', i18next.t('flash.labels.update.success'));
+        reply.redirect(app.reverse('labels'));
+      } catch (errors) {
+        req.flash('error', i18next.t('flash.labels.update.error'));
+        label.$set(data);
+        reply.render('labels/edit', { label, errors: errors.data ?? {} });
+      }
+
+      return reply;
+    })
+    .delete('/labels/:id', { name: 'deleteLabel', preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
       const label = await app.objection.models.label.query().findById(id);
-      try {
-        await label.$query().update(req.body.data);
-        req.flash('info', i18next.t('flash.labels.update.success'));
-        reply.redirect('/labels');
-      } catch ({ data }) {
-        req.flash('error', i18next.t('flash.labels.update.error'));
-        reply.redirect((`/labels/${id}/edit`), { errors: data });
-      }
-    })
-
-    .delete('/labels/:id', { name: 'deleteLabel', preValidation: app.authenticate }, async (req, reply) => {
-      const label = await app.objection.models.label.query().findById(req.params.id);
       const labelTasks = await label.$relatedQuery('tasks');
 
       if (labelTasks.length) {
         req.flash('error', i18next.t('flash.labels.delete.error'));
-
         return reply.redirect(app.reverse('labels'));
       }
 
       try {
-        await app.objection.models.label.query().deleteById(req.params.id);
+        await app.objection.models.label.query().deleteById(id);
         req.flash('info', i18next.t('flash.labels.delete.success'));
-      } catch (err) {
+      } catch (error) {
         req.flash('error', i18next.t('flash.labels.delete.error'));
       }
-
       reply.redirect(app.reverse('labels'));
 
       return reply;

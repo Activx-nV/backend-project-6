@@ -49,7 +49,7 @@ export default (app) => {
 
       return reply;
     })
-    .patch('/users/:id', async (req, reply) => {
+    .patch('/users/:id', { name: 'updateUser', preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
 
       try {

@@ -1,5 +1,3 @@
-// @ts-check
-
 const objectionUnique = require('objection-unique');
 const BaseModel = require('./BaseModel.cjs');
 
@@ -29,8 +27,8 @@ module.exports = class Label extends unique(BaseModel) {
         join: {
           from: 'labels.id',
           through: {
-            from: 'tasks_labels.labelId',
-            to: 'tasks_labels.taskId',
+            from: 'tasksLabels.labelId',
+            to: 'tasksLabels.taskId',
           },
           to: 'tasks.id',
         },

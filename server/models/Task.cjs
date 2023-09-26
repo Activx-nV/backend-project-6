@@ -1,10 +1,5 @@
-// @ts-check
-
 const objectionUnique = require('objection-unique');
 const BaseModel = require('./BaseModel.cjs');
-const TaskStatus = require('./TaskStatus.cjs');
-const User = require('./User.cjs');
-const Label = require('./Label.cjs');
 
 const unique = objectionUnique({ fields: ['name'] });
 
@@ -29,20 +24,17 @@ module.exports = class Task extends unique(BaseModel) {
   }
 
   static modifiers = {
-    filterCreator(queryBilder, creatorId) {
-      queryBilder.where('creatorId', creatorId);
+    filterCreator(queryBuilder, creatorId) {
+      queryBuilder.where('creatorId', creatorId);
     },
-
-    filterExecutor(queryBilder, executorId) {
-      queryBilder.where('executorId', executorId);
+    filterExecutor(queryBuilder, executorId) {
+      queryBuilder.where('executorId', executorId);
     },
-
-    filterStatus(queryBilder, statusId) {
-      queryBilder.where('statusId', statusId);
+    filterStatus(queryBuilder, statusId) {
+      queryBuilder.where('statusId', statusId);
     },
-
-    filterLabel(queryBilder, labelId) {
-      queryBilder.where('labels.id', labelId);
+    filterLabel(queryBuilder, labelId) {
+      queryBuilder.where('labels.id', labelId);
     },
   };
 
@@ -50,15 +42,15 @@ module.exports = class Task extends unique(BaseModel) {
     return {
       status: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: TaskStatus,
+        modelClass: 'TaskStatus.cjs',
         join: {
           from: 'tasks.statusId',
-          to: 'task_statuses.id',
+          to: 'statuses.id',
         },
       },
       creator: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: User,
+        modelClass: 'User.cjs',
         join: {
           from: 'tasks.creatorId',
           to: 'users.id',
@@ -66,7 +58,7 @@ module.exports = class Task extends unique(BaseModel) {
       },
       executor: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: User,
+        modelClass: 'User.cjs',
         join: {
           from: 'tasks.executorId',
           to: 'users.id',
@@ -74,12 +66,12 @@ module.exports = class Task extends unique(BaseModel) {
       },
       labels: {
         relation: BaseModel.ManyToManyRelation,
-        modelClass: Label,
+        modelClass: 'Label.cjs',
         join: {
           from: 'tasks.id',
           through: {
-            from: 'tasks_labels.taskId',
-            to: 'tasks_labels.labelId',
+            from: 'tasksLabels.taskId',
+            to: 'tasksLabels.labelId',
           },
           to: 'labels.id',
         },
